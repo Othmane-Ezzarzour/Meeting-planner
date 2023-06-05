@@ -2,8 +2,6 @@ package com.meeting.planner.repository;
 
 import java.util.List;
 
-import javax.transaction.Transactional;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,7 +17,6 @@ public interface EquipementRepository extends JpaRepository<Equipement, Long> {
     		+ "AND e.nom =:nom AND r.heure_debut_reservation is null" , nativeQuery = true)
 	public List<Equipement> findByNomParamsNative(@Param("nom") String nom);
     
-    @Transactional
     public void deleteBySalleId(long salleId);
 
 }

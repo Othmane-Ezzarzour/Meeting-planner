@@ -2,13 +2,12 @@ package com.meeting.planner.services.impl;
 
 import java.util.List;
 
-import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.meeting.planner.dto.SalleDto;
 import com.meeting.planner.dto.mapper.MapClassWithDto;
+import com.meeting.planner.exception.CustomException;
 import com.meeting.planner.model.Salle;
 import com.meeting.planner.repository.SalleRepository;
 import com.meeting.planner.service.SalleService;
@@ -23,7 +22,6 @@ public class SalleServiceImpl implements SalleService {
     private MapClassWithDto<Salle, SalleDto> mapSalle;
 
 	@Override
-	@Transactional
 	public SalleDto ajouterSalle(SalleDto salleDto) {
 
 		Salle salle = mapSalle.convertToEntity(salleDto, Salle.class);
@@ -34,11 +32,7 @@ public class SalleServiceImpl implements SalleService {
 
 	@Override
 	public SalleDto modifierSalle(long id, SalleDto salleDto) throws Exception {
-		Salle salle = salleRepository.findById(id).get();
-		if (salle == null) {
-			throw new Exception("Id not found" + id);
-		}
-		
+		Salle salle = salleRepository.findById(id).orElseThrow(() -> new CustomException("Id not found " + id));
 		salle.setNom(salleDto.getNom());
 		salle.setNombreDePlace(salleDto.getNombreDePlace());
 		Salle newSalle = salleRepository.save(salle);
@@ -49,10 +43,7 @@ public class SalleServiceImpl implements SalleService {
 
 	@Override
 	public void supprimerSalle(long id) throws Exception {
-		Salle salle = salleRepository.findById(id).get();
-		if (salle == null) {
-			throw new Exception("Id not found" + id);
-		}
+		Salle salle = salleRepository.findById(id).orElseThrow(() -> new CustomException("Id not found " + id));
 		salleRepository.delete(salle);
 	}
 

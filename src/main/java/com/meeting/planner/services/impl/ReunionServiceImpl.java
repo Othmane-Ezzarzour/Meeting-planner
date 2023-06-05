@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.meeting.planner.dto.ReunionDto;
 import com.meeting.planner.dto.mapper.MapClassWithDto;
+import com.meeting.planner.exception.CustomException;
 import com.meeting.planner.model.Equipement;
 import com.meeting.planner.model.ReserverEquipementParHeure;
 import com.meeting.planner.model.Reunion;
@@ -68,7 +69,7 @@ public class ReunionServiceImpl implements ReunionService {
 						|| reunionDto.getHeureDebut().minusHours(1).equals(reunion.getHeureDebut())
 						|| reunionDto.getHeureDebut().isBefore(dateDebutReunion)
 						|| reunionDto.getHeureDebut().isAfter(dateFinReunion)) {
-					throw new Exception(" tu peux pas reserver dans ce creneaux, merci de choisir une autre heure");
+					throw new CustomException(" tu peux pas reserver dans ce creneaux, merci de choisir une autre heure");
 				} else {
 					Reunion newReunion = new Reunion();
 					newReunion.setNom(reunionDto.getNom());
@@ -115,17 +116,14 @@ public class ReunionServiceImpl implements ReunionService {
 						newReunion.setTypeReunion(typeReunion);
 						
 					} else {
-						throw new Exception("Aucun equipement n'est disponible");
+						throw new CustomException("Aucun equipement n'est disponible");
 					}
-
 				}
-
 			}
 			Reunion savedReunion = reunionRepository.save(newReunion);
 			newReunionDto = reunionMapper.convertToDto(savedReunion, ReunionDto.class);
 			return newReunionDto;
 		}
-
 	}
 
 }

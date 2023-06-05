@@ -41,6 +41,27 @@ public class GlobalController {
 		return new ResponseEntity<>(newSalle, HttpStatus.CREATED);	
 	}
 	
+	@PutMapping("/salle/{id}")
+	public ResponseEntity<SalleDto> modifierSalle(@PathVariable long id, @RequestBody SalleDto salleDto) throws Exception {
+		
+		SalleDto newSalle = salleService.modifierSalle(id, salleDto);
+		return new ResponseEntity<>(newSalle, HttpStatus.OK);	
+	}
+	
+	@DeleteMapping("/salle/{id}")
+	public ResponseEntity<String> supprimerSalle(@PathVariable long id) throws Exception {
+		
+		salleService.supprimerSalle(id);
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);	
+	}
+	
+	@GetMapping("/salle/{id}")
+	public ResponseEntity<List<SalleDto>> getAllSalles() throws Exception {
+		
+		List<SalleDto> salleDtos = salleService.allSalles();
+		return new ResponseEntity<>(salleDtos, HttpStatus.NO_CONTENT);	
+	}
+	
 	@PostMapping("/{salleId}/equipment")
 	public ResponseEntity<EquipementDto> ajouterEquipmentParSalle(@PathVariable long salleId,
 			@RequestBody EquipementDto equipementDto) throws Exception{
